@@ -137,6 +137,8 @@ function git_push() {
 
   cd "$tmp_dir" 
   git init
+  git config user.name "Carrier"
+  git config user.email "carrier-app@example.com"
   git remote add carrier "http://$user:$pass@gitea.$target/$user/$app_name"
   git fetch --all
   git reset --soft carrier/main

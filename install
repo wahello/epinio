@@ -17,7 +17,8 @@ fi
 ./traefik/wait
 
 # get a public IP
-external_ip=$(kubectl get svc -A --field-selector='metadata.name=traefik' -o json | jq -r .items[0].status.loadBalancer.ingress[0].ip)
+#external_ip=$(kubectl get svc -A --field-selector='metadata.name=traefik' -o json | jq -r .items[0].status.loadBalancer.ingress[0].ip)
+external_ip=$(kubectl  get nodes -o json  | jq -r '.items[0].status.addresses[] | select(.type=="InternalIP") | .address')
 echo "Will use public IP address ${external_ip}"
 
 # install quarks
