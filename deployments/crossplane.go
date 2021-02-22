@@ -100,9 +100,10 @@ func (k Crossplane) apply(c *kubernetes.Cluster, ui *ui.UI, options kubernetes.I
 		return err
 	}
 
-	if err = createQuarksMonitoredNamespace(c, CrossplaneDeploymentID); err != nil {
-		return err
-	}
+	// TODO: Do we need it quarks enabled?
+	// if err = createQuarksMonitoredNamespace(c, CrossplaneDeploymentID); err != nil {
+	// 	return err
+	// }
 
 	tarPath, err := helpers.ExtractFile(crossplaneChartFile)
 	if err != nil {

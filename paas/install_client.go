@@ -107,6 +107,7 @@ func (c *InstallClient) Install(cmd *cobra.Command, options *kubernetes.Installa
 		&deployments.Gitea{Timeout: DefaultTimeoutSec},
 		&deployments.Registry{Timeout: DefaultTimeoutSec},
 		&deployments.Tekton{Timeout: DefaultTimeoutSec},
+		&deployments.Crossplane{Timeout: DefaultTimeoutSec},
 	} {
 		details.Info("deploy", "Deployment", deployment.ID())
 
@@ -132,6 +133,7 @@ func (c *InstallClient) Uninstall(cmd *cobra.Command) error {
 
 	for _, deployment := range []kubernetes.Deployment{
 		&deployments.Workloads{Timeout: DefaultTimeoutSec},
+		&deployments.Crossplane{Timeout: DefaultTimeoutSec},
 		&deployments.Tekton{Timeout: DefaultTimeoutSec},
 		&deployments.Registry{Timeout: DefaultTimeoutSec},
 		&deployments.Gitea{Timeout: DefaultTimeoutSec},
