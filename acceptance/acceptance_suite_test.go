@@ -78,15 +78,15 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 })
 
 var _ = AfterSuite(func() {
-	fmt.Printf("Uninstall carrier on node %d\n", config.GinkgoConfig.ParallelNode)
-	out, _ := uninstallCarrier()
-	match, _ := regexp.MatchString(`Carrier uninstalled`, out)
-	if !match {
-		panic("Uninstalling carrier failed: " + out)
-	}
+	// fmt.Printf("Uninstall carrier on node %d\n", config.GinkgoConfig.ParallelNode)
+	// out, _ := uninstallCarrier()
+	// match, _ := regexp.MatchString(`Carrier uninstalled`, out)
+	// if !match {
+	// 	panic("Uninstalling carrier failed: " + out)
+	// }
 
-	fmt.Printf("Deleting tmpdir on node %d\n", config.GinkgoConfig.ParallelNode)
-	deleteTmpDir()
+	// fmt.Printf("Deleting tmpdir on node %d\n", config.GinkgoConfig.ParallelNode)
+	// deleteTmpDir()
 })
 
 func ensureCluster() {

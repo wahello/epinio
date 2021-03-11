@@ -34,10 +34,10 @@ var _ = Describe("Catalog Services", func() {
 	})
 
 	Describe("create-service", func() {
-		AfterEach(func() {
-			out, err := Carrier(fmt.Sprintf("delete-service %s", serviceName), "")
-			Expect(err).ToNot(HaveOccurred(), out)
-		})
+		// AfterEach(func() {
+		// 	out, err := Carrier(fmt.Sprintf("delete-service %s", serviceName), "")
+		// 	Expect(err).ToNot(HaveOccurred(), out)
+		// })
 
 		It("creates a catalog based service", func() {
 			out, err := Carrier(fmt.Sprintf("create-service %s mariadb 10-3-22", serviceName), "")
@@ -84,22 +84,22 @@ var _ = Describe("Catalog Services", func() {
 			Expect(err).ToNot(HaveOccurred(), out)
 		})
 
-		AfterEach(func() {
-			out, err := Carrier(fmt.Sprintf("unbind-service %s %s", serviceName, appName), "")
-			if err != nil {
-				fmt.Printf("unbinding service failed: %s\n%s", err.Error(), out)
-			}
+		// AfterEach(func() {
+		// 	out, err := Carrier(fmt.Sprintf("unbind-service %s %s", serviceName, appName), "")
+		// 	if err != nil {
+		// 		fmt.Printf("unbinding service failed: %s\n%s", err.Error(), out)
+		// 	}
 
-			out, err = Carrier("delete "+appName, "")
-			if err != nil {
-				fmt.Printf("deleting app failed : %s\n%s", err.Error(), out)
-			}
+		// 	out, err = Carrier("delete "+appName, "")
+		// 	if err != nil {
+		// 		fmt.Printf("deleting app failed : %s\n%s", err.Error(), out)
+		// 	}
 
-			out, err = Carrier("delete-service "+serviceName, "")
-			if err != nil {
-				fmt.Printf("deleting service failed : %s\n%s", err.Error(), out)
-			}
-		})
+		// 	out, err = Carrier("delete-service "+serviceName, "")
+		// 	if err != nil {
+		// 		fmt.Printf("deleting service failed : %s\n%s", err.Error(), out)
+		// 	}
+		// })
 
 		It("binds a service to the application deployment", func() {
 			out, err := Carrier(fmt.Sprintf("bind-service %s %s", serviceName, appName), "")
@@ -132,17 +132,17 @@ var _ = Describe("Catalog Services", func() {
 			Expect(err).ToNot(HaveOccurred(), out)
 		})
 
-		AfterEach(func() {
-			out, err := Carrier("delete "+appName, "")
-			if err != nil {
-				fmt.Printf("deleting apps failed : %s\n%s", err.Error(), out)
-			}
+		// AfterEach(func() {
+		// 	out, err := Carrier("delete "+appName, "")
+		// 	if err != nil {
+		// 		fmt.Printf("deleting apps failed : %s\n%s", err.Error(), out)
+		// 	}
 
-			out, err = Carrier("delete-service "+serviceName, "")
-			if err != nil {
-				fmt.Printf("deleting service failed : %s\n%s", err.Error(), out)
-			}
-		})
+		// 	out, err = Carrier("delete-service "+serviceName, "")
+		// 	if err != nil {
+		// 		fmt.Printf("deleting service failed : %s\n%s", err.Error(), out)
+		// 	}
+		// })
 
 		It("unbinds a service from the application deployment", func() {
 			out, err := Carrier(fmt.Sprintf("unbind-service %s %s", serviceName, appName), "")

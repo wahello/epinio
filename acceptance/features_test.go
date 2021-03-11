@@ -1,8 +1,6 @@
 package acceptance_test
 
 import (
-	"os"
-
 	"github.com/suse/carrier/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -29,7 +27,7 @@ var _ = Describe("Carrier enable/disable features", func() {
 
 	Describe("services-google", func() {
 		var serviceAccountJson string
-		var err error
+		// var err error
 
 		BeforeEach(func() {
 			// Make sure they aren't already enabled
@@ -53,10 +51,10 @@ var _ = Describe("Carrier enable/disable features", func() {
 			Expect(err).ToNot(HaveOccurred(), serviceAccountJson)
 		})
 
-		AfterEach(func() {
-			err = os.Remove(serviceAccountJson)
-			Expect(err).ToNot(HaveOccurred())
-		})
+		// AfterEach(func() {
+		// 	err = os.Remove(serviceAccountJson)
+		// 	Expect(err).ToNot(HaveOccurred())
+		// })
 
 		It("enables google services", func() {
 			out, err := Carrier("enable services-google --service-account-json "+serviceAccountJson, "")

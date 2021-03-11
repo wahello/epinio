@@ -66,13 +66,13 @@ var _ = Describe("Custom Services", func() {
 			Expect(err).ToNot(HaveOccurred(), out)
 		})
 
-		AfterEach(func() {
-			out, err := Carrier("delete "+appName, "")
-			Expect(err).ToNot(HaveOccurred(), out)
+		// AfterEach(func() {
+		// 	out, err := Carrier("delete "+appName, "")
+		// 	Expect(err).ToNot(HaveOccurred(), out)
 
-			out, err = Carrier("delete-service "+serviceName, "")
-			Expect(err).ToNot(HaveOccurred(), out)
-		})
+		// 	out, err = Carrier("delete-service "+serviceName, "")
+		// 	Expect(err).ToNot(HaveOccurred(), out)
+		// })
 
 		It("binds a service to the application deployment", func() {
 			out, err := Carrier(fmt.Sprintf("bind-service %s %s", serviceName, appName), "")
@@ -105,13 +105,13 @@ var _ = Describe("Custom Services", func() {
 			Expect(err).ToNot(HaveOccurred(), out)
 		})
 
-		AfterEach(func() {
-			out, err := Carrier("delete "+appName, "")
-			Expect(err).ToNot(HaveOccurred(), out)
+		// AfterEach(func() {
+		// 	out, err := Carrier("delete "+appName, "")
+		// 	Expect(err).ToNot(HaveOccurred(), out)
 
-			out, err = Carrier("delete-service "+serviceName, "")
-			Expect(err).ToNot(HaveOccurred(), out)
-		})
+		// 	out, err = Carrier("delete-service "+serviceName, "")
+		// 	Expect(err).ToNot(HaveOccurred(), out)
+		// })
 
 		It("unbinds a service from the application deployment", func() {
 			out, err := Carrier(fmt.Sprintf("unbind-service %s %s", serviceName, appName), "")

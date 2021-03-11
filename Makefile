@@ -35,7 +35,7 @@ test: lint
 
 GINKGO_NODES ?= 2
 test-acceptance:
-	ginkgo -nodes ${GINKGO_NODES} -stream acceptance/.
+	ginkgo -nodes ${GINKGO_NODES} -stream -untilItFails acceptance/.
 
 generate:
 	go generate ./...
