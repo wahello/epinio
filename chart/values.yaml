@@ -1,0 +1,7 @@
+## Default values for Carrier Helm Chart.
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+# The system domain to use for Carrier. Equivalent to `carrier install` system-domain
+# parameter.
+domain: ""

@@ -1,0 +1,14 @@
+apiVersion: v1
+name: carrier
+version: 0.0.0
+appVersion: 0.0.0
+description: A Helm chart for carrier, a PaaS for Kubernetes
+home: https://github.com/SUSE/carrier
+icon: https://raw.githubusercontent.com/SUSE/carrier/main/docs/carrier.svg
+keywords:
+- carrier
+sources:
+- https://github.com/SUSE/carrier
+maintainers:
+- name: SUSE
+  email: carrier-team@suse.com # TODO
