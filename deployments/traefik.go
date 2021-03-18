@@ -12,6 +12,7 @@ import (
 	"github.com/suse/carrier/helpers"
 	"github.com/suse/carrier/kubernetes"
 	"github.com/suse/carrier/paas/ui"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -155,6 +156,9 @@ func (k Traefik) Deploy(c *kubernetes.Cluster, ui *ui.UI, options kubernetes.Ins
 		ui.Exclamation().Msg("Traefik Ingress already installed, skipping")
 
 		return nil
+	}
+	if err != nil && !apierrors.IsNotFound(err) {
+		return err
 	}
 
 	ui.Note().KeeplineUnder(1).Msg("Deploying Traefik Ingress...")
