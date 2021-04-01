@@ -147,6 +147,7 @@ func (w Workloads) createWorkloadsNamespace(c *kubernetes.Cluster, ui *termui.UI
 				Name: WorkloadsDeploymentID,
 				Labels: map[string]string{
 					"quarks.cloudfoundry.org/monitored":  "quarks-secret",
+					"istio-injection":                    "enabled",
 					kubernetes.CarrierDeploymentLabelKey: kubernetes.CarrierDeploymentLabelValue,
 				},
 			},
@@ -305,6 +306,12 @@ func (w Workloads) warmupBuilder(c *kubernetes.Cluster) error {
 			Spec: batchv1.JobSpec{
 				BackoffLimit: &backoffLimit,
 				Template: corev1.PodTemplateSpec{
+					ObjectMeta: metav1.ObjectMeta{
+						Annotations: map[string]string{
+							// Let the Job complete: https://github.com/istio/istio/issues/11045
+							"sidecar.istio.io/inject": "false",
+						},
+					},
 					Spec: corev1.PodSpec{
 						Containers: []corev1.Container{
 							{

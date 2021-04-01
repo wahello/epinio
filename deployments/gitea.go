@@ -116,7 +116,7 @@ ingress:
   hosts:
     - %s
   annotations:
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: istio
 service:
   http:
     type: NodePort
@@ -168,6 +168,12 @@ gitea:
 		return errors.New("Failed installing Gitea: " + out)
 	}
 	err = c.LabelNamespace(GiteaDeploymentID, kubernetes.CarrierDeploymentLabelKey, kubernetes.CarrierDeploymentLabelValue)
+	if err != nil {
+		return err
+	}
+	// TODO: Create and label the namespace before creating workloads on it
+	// Otherwise no istio sidecar will be injected.
+	err = c.LabelNamespace(GiteaDeploymentID, "istio-injection", "enabled")
 	if err != nil {
 		return err
 	}

@@ -85,7 +85,8 @@ spec:
             - name: NAMESPACE
               value: "carrier-workloads"
             - name: LABELS
-              value: '{ "eirinix-ingress": "true", "kubernetes.io/ingress.class": "traefik" }'
+              value: '{ "eirinix-ingress": "true"}'
             - name: ANNOTATIONS
               value: '{ "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
-                "traefik.ingress.kubernetes.io/router.tls": "true" }'
+                "traefik.ingress.kubernetes.io/router.tls": "true",
+                "kubernetes.io/ingress.class": "istio" }'

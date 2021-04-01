@@ -117,6 +117,10 @@ func (k Tekton) apply(c *kubernetes.Cluster, ui *termui.UI, options kubernetes.I
 	if err != nil {
 		return err
 	}
+	err = c.LabelNamespace(tektonNamespace, "istio-injection", "enabled")
+	if err != nil {
+		return err
+	}
 
 	kTimeout := strconv.Itoa(int(k.Timeout.Seconds()))
 
@@ -339,6 +343,7 @@ func applyTektonStaging(c *kubernetes.Cluster, ui *termui.UI) (string, error) {
 }
 
 func createTektonIngress(c *kubernetes.Cluster, subdomain string) error {
+	pathType := v1beta1.PathTypePrefix
 	_, err := c.Kubectl.ExtensionsV1beta1().Ingresses("tekton-pipelines").Create(
 		context.Background(),
 		// TODO: Switch to networking v1 when we don't care about <1.18 clusters
@@ -349,7 +354,7 @@ func createTektonIngress(c *kubernetes.Cluster, subdomain string) error {
 				Name:      "tekton-dashboard",
 				Namespace: "tekton-pipelines",
 				Annotations: map[string]string{
-					"kubernetes.io/ingress.class": "traefik",
+					"kubernetes.io/ingress.class": "istio",
 				},
 			},
 			Spec: v1beta1.IngressSpec{
@@ -360,7 +365,8 @@ func createTektonIngress(c *kubernetes.Cluster, subdomain string) error {
 							HTTP: &v1beta1.HTTPIngressRuleValue{
 								Paths: []v1beta1.HTTPIngressPath{
 									{
-										Path: "/",
+										Path:     "/",
+										PathType: &pathType,
 										Backend: v1beta1.IngressBackend{
 											ServiceName: "tekton-dashboard",
 											ServicePort: intstr.IntOrString{

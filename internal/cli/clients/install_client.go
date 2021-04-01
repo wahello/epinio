@@ -101,9 +101,9 @@ func (c *InstallClient) Install(cmd *cobra.Command) error {
 	// to report all problems at once, instead of early and
 	// piecemal.
 
-	if err := c.InstallDeployment(&deployments.Traefik{Timeout: duration.ToDeployment()}, details); err != nil {
-		return err
-	}
+	// if err := c.InstallDeployment(&deployments.Traefik{Timeout: duration.ToDeployment()}, details); err != nil {
+	// 	return err
+	// }
 
 	// Try to give a omg.howdoi.website domain if the user didn't specify one
 	domain, err := c.options.GetOpt("system_domain", "")
@@ -203,7 +203,7 @@ func (c *InstallClient) showInstallConfiguration(opts *kubernetes.InstallationOp
 func (c *InstallClient) fillInMissingSystemDomain(domain *kubernetes.InstallationOption) error {
 	if domain.Value.(string) == "" {
 		ip := ""
-		s := c.ui.Progressf("Waiting for LoadBalancer IP on traefik service.")
+		s := c.ui.Progressf("Waiting for LoadBalancer IP on istio service.")
 		defer s.Stop()
 		err := helpers.RunToSuccessWithTimeout(
 			func() error {
@@ -211,7 +211,7 @@ func (c *InstallClient) fillInMissingSystemDomain(domain *kubernetes.Installatio
 			}, duration.ToSystemDomain(), duration.PollInterval())
 		if err != nil {
 			if strings.Contains(err.Error(), "Timed out after") {
-				return errors.New("Timed out waiting for LoadBalancer IP on traefik service.\n" +
+				return errors.New("Timed out waiting for LoadBalancer IP on istio service.\n" +
 					"Ensure your kubernetes platform has the ability to provision LoadBalancer IP address.\n\n" +
 					"Follow these steps to enable this ability\n" +
 					"https://github.com/SUSE/carrier/blob/main/docs/install.md")
@@ -229,17 +229,17 @@ func (c *InstallClient) fillInMissingSystemDomain(domain *kubernetes.Installatio
 
 func (c *InstallClient) fetchIP(ip *string) error {
 	serviceList, err := c.kubeClient.Kubectl.CoreV1().Services("").List(context.Background(), metav1.ListOptions{
-		FieldSelector: "metadata.name=traefik",
+		FieldSelector: "metadata.name=istio-ingressgateway",
 	})
 	if len(serviceList.Items) == 0 {
-		return errors.New("couldn't find the traefik service")
+		return errors.New("couldn't find the istio service")
 	}
 	if err != nil {
 		return err
 	}
 	ingress := serviceList.Items[0].Status.LoadBalancer.Ingress
 	if len(ingress) <= 0 {
-		return errors.New("ingress list is empty in traefik service")
+		return errors.New("ingress list is empty in istio service")
 	}
 	*ip = ingress[0].IP
 
