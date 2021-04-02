@@ -1,4 +1,4 @@
 ---
 php:
   webserver: httpd
-
+  enable_https_redirect: false
