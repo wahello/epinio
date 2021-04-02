@@ -12,6 +12,7 @@ import (
 	"github.com/suse/carrier/helpers"
 	"github.com/suse/carrier/kubernetes"
 	"github.com/suse/carrier/termui"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -162,18 +163,16 @@ gitea:
 	}
 	defer os.Remove(configPath)
 
-	helmCmd := fmt.Sprintf("helm %s gitea --create-namespace --values %s --namespace %s %s %s", action, configPath, GiteaDeploymentID, giteaChartURL, strings.Join(helmArgs, " "))
+	if err = k.createNamespace(c); err != nil {
+		return err
+	}
+
+	helmCmd := fmt.Sprintf("helm %s gitea --values %s --namespace %s %s %s", action, configPath, GiteaDeploymentID, giteaChartURL, strings.Join(helmArgs, " "))
 
 	if out, err := helpers.RunProc(helmCmd, currentdir, k.Debug); err != nil {
 		return errors.New("Failed installing Gitea: " + out)
 	}
 	err = c.LabelNamespace(GiteaDeploymentID, kubernetes.CarrierDeploymentLabelKey, kubernetes.CarrierDeploymentLabelValue)
-	if err != nil {
-		return err
-	}
-	// TODO: Create and label the namespace before creating workloads on it
-	// Otherwise no istio sidecar will be injected.
-	err = c.LabelNamespace(GiteaDeploymentID, "istio-injection", "enabled")
 	if err != nil {
 		return err
 	}
@@ -234,4 +233,22 @@ func (k Gitea) Upgrade(c *kubernetes.Cluster, ui *termui.UI, options kubernetes.
 	ui.Note().Msg("Upgrading Gitea...")
 
 	return k.apply(c, ui, options, true)
+}
+
+func (k Gitea) createNamespace(c *kubernetes.Cluster) error {
+	_, err := c.Kubectl.CoreV1().Namespaces().Create(
+		context.Background(),
+		&corev1.Namespace{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: GiteaDeploymentID,
+				Labels: map[string]string{
+					"istio-injection":                    "enabled",
+					kubernetes.CarrierDeploymentLabelKey: kubernetes.CarrierDeploymentLabelValue,
+				},
+			},
+		},
+		metav1.CreateOptions{},
+	)
+
+	return err
 }

@@ -157,9 +157,6 @@ func (w Workloads) createWorkloadsNamespace(c *kubernetes.Cluster, ui *termui.UI
 		return nil
 	}
 
-	if err := c.LabelNamespace(WorkloadsDeploymentID, kubernetes.CarrierDeploymentLabelKey, kubernetes.CarrierDeploymentLabelValue); err != nil {
-		return err
-	}
 	if err := w.createGiteaCredsSecret(c); err != nil {
 		return err
 	}

@@ -113,15 +113,11 @@ func (k Registry) apply(c *kubernetes.Cluster, ui *termui.UI, options kubernetes
 	}
 	defer os.Remove(tarPath)
 
-	helmCmd := fmt.Sprintf("helm %s %s --create-namespace --namespace %s %s", action, RegistryDeploymentID, RegistryDeploymentID, tarPath)
+	helmCmd := fmt.Sprintf("helm %s %s --namespace %s %s", action, RegistryDeploymentID, RegistryDeploymentID, tarPath)
 	if out, err := helpers.RunProc(helmCmd, currentdir, k.Debug); err != nil {
 		return errors.New("Failed installing Registry: " + out)
 	}
 
-	err = c.LabelNamespace(RegistryDeploymentID, kubernetes.CarrierDeploymentLabelKey, kubernetes.CarrierDeploymentLabelValue)
-	if err != nil {
-		return err
-	}
 	if err := c.WaitUntilPodBySelectorExist(ui, RegistryDeploymentID, "app.kubernetes.io/name=container-registry",
 		duration.ToPodReady()); err != nil {
 		return errors.Wrap(err, "failed waiting Registry deployment to come up")
@@ -183,7 +179,9 @@ func createQuarksMonitoredNamespace(c *kubernetes.Cluster, name string) error {
 			ObjectMeta: metav1.ObjectMeta{
 				Name: name,
 				Labels: map[string]string{
-					"quarks.cloudfoundry.org/monitored": "quarks-secret",
+					"quarks.cloudfoundry.org/monitored":  "quarks-secret",
+					"istio-injection":                    "enabled",
+					kubernetes.CarrierDeploymentLabelKey: kubernetes.CarrierDeploymentLabelValue,
 				},
 			},
 		},
