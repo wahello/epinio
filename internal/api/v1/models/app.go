@@ -96,7 +96,12 @@ func (app *App) GitURL(server string) string {
 // later used in app.yml.  Since the final commit is not known when the app.yml
 // is written, we cannot use Repo.Revision
 func (app *App) ImageURL(server string) string {
+	// TODO: Should there be an org here? Otherwise app name should be globally unique.
 	return fmt.Sprintf("%s/%s-%s", server, app.Name, app.Git.Revision)
+}
+
+func (app *App) CacheImageURL(server string) string {
+	return fmt.Sprintf("%s/%s-%s-cache", server, app.Org, app.Name)
 }
 
 // AppRef references an App by name and org

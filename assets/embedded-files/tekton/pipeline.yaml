@@ -28,6 +28,9 @@ spec:
     - name: IMAGE
       type: string
       description: "The container image for the application Deployment"
+    - name: CACHE_IMAGE
+      type: string
+      description: "The cache image to be used for staging"
     - name: STAGE_ID
       type: string
       description: "The identifier of the unique staging process"
@@ -50,6 +53,8 @@ spec:
     params:
     - name: BUILDER_IMAGE
       value: paketobuildpacks/builder:full
+    - name: CACHE_IMAGE
+      value: "$(params.CACHE_IMAGE)"
     - name: SOURCE_SUBPATH
       value: app
     resources:

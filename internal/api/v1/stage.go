@@ -181,6 +181,7 @@ func newPipelineRun(uid string, app models.App) *v1beta1.PipelineRun {
 				{Name: "ROUTE", Value: *v1beta1.NewArrayOrString(app.Route)},
 				{Name: "INSTANCES", Value: *v1beta1.NewArrayOrString(strconv.Itoa(int(app.Instances)))},
 				{Name: "IMAGE", Value: *v1beta1.NewArrayOrString(app.ImageURL(gitea.LocalRegistry))},
+				{Name: "CACHE_IMAGE", Value: *v1beta1.NewArrayOrString(app.CacheImageURL(RegistryURL))},
 				{Name: "STAGE_ID", Value: *v1beta1.NewArrayOrString(uid)},
 			},
 			Workspaces: []v1beta1.WorkspaceBinding{
