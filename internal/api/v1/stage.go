@@ -161,6 +161,10 @@ func existingReplica(ctx context.Context, client *k8s.Clientset, app models.AppR
 }
 
 func newPipelineRun(uid string, app models.App) *v1beta1.PipelineRun {
+	envVars := &v1beta1.ArrayOrString{
+		Type:     v1beta1.ParamTypeArray,
+		ArrayVal: []string{"RAILS_MASTER_KEY=2881bdf15d3bfaa219f7ddeeddb68a86"},
+	}
 	return &v1beta1.PipelineRun{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: uid,
@@ -183,6 +187,7 @@ func newPipelineRun(uid string, app models.App) *v1beta1.PipelineRun {
 				{Name: "APP_IMAGE", Value: *v1beta1.NewArrayOrString(app.ImageURL(RegistryURL))},
 				{Name: "DEPLOYMENT_IMAGE", Value: *v1beta1.NewArrayOrString(app.ImageURL(gitea.LocalRegistry))},
 				{Name: "CACHE_IMAGE", Value: *v1beta1.NewArrayOrString(app.CacheImageURL(RegistryURL))},
+				{Name: "ENV_VARS", Value: *envVars},
 				{Name: "STAGE_ID", Value: *v1beta1.NewArrayOrString(uid)},
 			},
 			Workspaces: []v1beta1.WorkspaceBinding{
