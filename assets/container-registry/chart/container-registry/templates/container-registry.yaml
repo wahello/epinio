@@ -219,31 +219,3 @@ data:
         proxy_read_timeout  90;
       }
     }
----
-# COPIES --------------------------
----
-apiVersion: quarks.cloudfoundry.org/v1alpha1
-kind: QuarksSecret
-metadata:
-  labels:
-    quarks.cloudfoundry.org/secret-kind: generated
-  annotations:
-    quarks.cloudfoundry.org/secret-copy-of: epinio-registry/registry-tls-self
-  name: registry-tls-self
-  namespace: tekton-staging
-spec:
-  type: copy
-  secretName: registry-tls-self
----
-apiVersion: quarks.cloudfoundry.org/v1alpha1
-kind: QuarksSecret
-metadata:
-  labels:
-    quarks.cloudfoundry.org/secret-kind: generated
-  annotations:
-    quarks.cloudfoundry.org/secret-copy-of: epinio-registry/registry-tls-self-ca
-  name: registry-tls-self-ca
-  namespace: tekton-staging
-spec:
-  type: copy
-  secretName: registry-tls-self-ca

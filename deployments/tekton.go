@@ -264,6 +264,13 @@ func (k Tekton) apply(ctx context.Context, c *kubernetes.Cluster, ui *termui.UI,
 		return errors.Wrap(err, fmt.Sprintf("%s failed:\n%s", message, out))
 	}
 
+	// Copy epinio-registry-tls secret from registry namespace to tekton staging namespace
+	secretName := fmt.Sprintf("%s-tls", RegistryDeploymentID)
+	err = c.CopySecret(ctx, RegistryDeploymentID, TektonStagingNamespace, secretName)
+	if err != nil {
+		return err
+	}
+
 	message = "Applying tekton staging resources"
 	out, err = helpers.WaitForCommandCompletion(ui, message,
 		func() (string, error) {

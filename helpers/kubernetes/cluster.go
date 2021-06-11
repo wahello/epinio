@@ -10,6 +10,7 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/epinio/epinio/helpers"
 	kubeconfig "github.com/epinio/epinio/helpers/kubernetes/config"
 	generic "github.com/epinio/epinio/helpers/kubernetes/platform/generic"
 	ibm "github.com/epinio/epinio/helpers/kubernetes/platform/ibm"
@@ -305,6 +306,18 @@ func (c *Cluster) WaitForSecret(ctx context.Context, namespace, secretName strin
 	})
 
 	return secret, waitErr
+}
+
+// CopySecret copies secret from source namespace to destination namespace
+func (c *Cluster) CopySecret(ctx context.Context, sourceNamespace, destinationNamespace, secretName string) error {
+	cmd := fmt.Sprintf("get secret %s --namespace=%s -o yaml | sed 's/namespace: .*/namespace: %s/' | kubectl apply -f -", secretName, sourceNamespace,
+		destinationNamespace)
+	_, err := helpers.Kubectl(cmd)
+	if err != nil {
+		return errors.Wrapf(err, "couldn't copy secret %s", secretName)
+	}
+
+	return nil
 }
 
 // Poll up to timeout for pod to enter running state.
