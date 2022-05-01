@@ -24,7 +24,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.4.1
 	github.com/mholt/archiver/v3 v3.5.1
-	github.com/minio/minio-go/v7 v7.0.13
+	github.com/minio/minio-go/v7 v7.0.24
 	github.com/novln/docker-parser v1.0.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/onsi/ginkgo/v2 v2.1.1
